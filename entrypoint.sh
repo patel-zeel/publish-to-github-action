@@ -10,6 +10,10 @@ if [ -z "${BRANCH_NAME}" ]; then
    export BRANCH_NAME=master
 fi
 
+if [ -z "${files}" ]; then
+   export files="."
+fi
+
 # initialize git
 remote_repo="https://${GITHUB_ACTOR}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 git config http.sslVerify false
@@ -24,7 +28,7 @@ git lfs install
 
 # publish any new files
 git checkout ${BRANCH_NAME}
-git add -A
+git add -A ${files}
 timestamp=$(date -u)
 git commit -m "Automated publish: ${timestamp} ${GITHUB_SHA}" || exit 0
 git pull --rebase publisher ${BRANCH_NAME}
